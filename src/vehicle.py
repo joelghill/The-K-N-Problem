@@ -12,3 +12,10 @@ class Vehicle(object):
 	def __init__(self, location):
 		super(Vehicle, self).__init__()
 		self.location = location
+
+	def __str__(self):
+		iden	 = "ID:  " + str(id(self))
+		location = "Location:  "+ str(self.location)
+		package	 = "Package:  " + str(self.package)
+		return iden + "\n" + location + "\n" + package + "\n"
+
