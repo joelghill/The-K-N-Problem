@@ -54,14 +54,14 @@ class StateSpace(object):
     def generate_vehicles(self, number):
         self.vehicles = [Vcl.Vehicle(self.garage) for i in range(number)]
 
-
     def generate_packages(self, number):
         self.packages = [Pkg.Package(self.size) for i in range(number)]
         # give eack package a name and add dropoff to list
         for p in range(len(self.packages)):
             self.packages[p].name = str(p)
             self.dropoffs.append(self.packages[p].dropoff)
-
+        print "DropOffs:  "
+        print self.dropoffs
 
     def generate_garage(self):
         self.garage = 0
@@ -131,26 +131,68 @@ class StateSpace(object):
         """ Use A* to calculate shortest path between nodes """
         return nx.astar_path(self.space, point1, point2, heuristic=self.distance)
 
-    def closest_dropoff(self, node1):
-        Q = Queue.Queue()
-        dist = 1
-        visited = [node1]
-        neighbours = nx.all_neighbors(self.space, node1)
-        print(neighbours)
+    def expand_node(self, node, queue, visited):
+        """
+        Method to expand nodes for BFS
+        :rtype : None
+        :param node: nod to expand
+        :param queue: unexpanded nodes
+        :param visited: list of visited nodes
+        :return:
+        """
+        neighbours = nx.all_neighbors(self.space, node)
         while True:
             try:
-                node = neighbours.Next()
-                if node in self.dropoffs and node not in visited:
-                    return dist, node
-                else:
-                    if node not in visited:
-                        Q.put(node)
+                n = neighbours.next()
+                if node not in visited:
+                    queue.put(n)
             except StopIteration:
                 break
+        return
 
-                # for node in neighbours:
-                # 4if node
+    def visit_node(self, node, visited, visit_function):
+        """
 
+        :param node: Node to visit
+        :param visited: list of previously visted nodes
+        :param visit_function: Function to perform on node
+        :return: result of visit_function or None if node visited
+        """
+
+        assert isinstance(visited, list)
+        visited.append(node)
+        return visit_function(node)
+
+    def valid_dropoff(self, node):
+        if node in self.dropoffs:
+            return True
+        else:
+            return False
+        
+    def closest_dropoff(self, package):
+        """
+        Finds closest dropoff point from node1
+        :param node1: node from graph
+        :return: distance to nearest dropoff, dropoff node.
+        """
+        #print "Finding closest dropoff to " + str(node1)
+        node1 = package.pickup
+        own_drop = package.dropoff
+        q = Queue.Queue()
+        visited = []
+        self.expand_node(node1, q, visited)
+        #print "q empty?"
+        #print q.empty()
+        while not q.empty():
+            #print "q not empty"
+            #print "Size of q is:  " + str(q.qsize())
+            n = q.get()
+            #print "Node retrieved: " + str(n)
+            if n not in visited:
+                self.expand_node(n, q, visited)
+                #print "Node not visited yet...."
+                if self.visit_node(n, visited, self.valid_dropoff) and n is not own_drop:
+                    return len(self.shortest_path(n, node1)), n
 
 
 
