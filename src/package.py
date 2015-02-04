@@ -16,10 +16,11 @@ class Package(object):
 
     """Package contains a pickup and dropoff location"""
 
-    def __init__(self, size):
+    def __init__(self, size=None):
         super(Package, self).__init__()
-        self.dropoff = random.randint(1, size-1)
-        self.pickup = random.randint(1, size-1)
+        if size is not None:
+            self.dropoff = random.randint(1, size-1)
+            self.pickup = random.randint(1, size-1)
 
     def __str__(self):
         iden = "ID:  " + str(id(self))

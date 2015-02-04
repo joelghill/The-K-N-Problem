@@ -34,7 +34,7 @@ class StateSpace(object):
 	M: size of map
 	"""
 
-    def __init__(self, K=1, N=1, Height=5, Width=5):
+    def __init__(self, K=1, N=1, Height=5, Width=5, packages=None):
         super(StateSpace, self).__init__()
 
         mat.rc("font", family="Arial")
@@ -44,11 +44,11 @@ class StateSpace(object):
         self.space = self.generateSpace(Height, Width)
         self.generate_garage()
         self.generate_vehicles(N)
-        self.generate_packages(K)
+        self.generate_packages(K, packages)
 
 
     def generateSpace(self, n, m):
-        """ return graph of n size"""
+        """ return graph of n * m  size"""
         g = nx.grid_2d_graph(n, m, periodic=False, create_using=None)
         self.map_positions(n, m)
         return nx.convert_node_labels_to_integers(g)
@@ -56,15 +56,27 @@ class StateSpace(object):
     def generate_vehicles(self, number):
         self.vehicles = [Vcl.Vehicle(self.garage) for i in range(number)]
 
-    def generate_packages(self, number):
-        self.packages = [Pkg.Package(self.size) for i in range(number)]
-        # give eack package a name and add dropoff to list
+    def generate_packages(self, number, packages=None):
+        # give pack package a name and add dropoff to list
+        # if list was given, use that
+        if packages is not None:
+            self.packages = [Pkg.Package() for i in range(len(packages))]
+            for package in self.packages:
+                newpos = packages.pop()
+                package.pickup = newpos[0]
+                package.dropoff = newpos[1]
+        else:
+            #don't fully get python yet....
+            self.packages = [Pkg.Package(self.size) for i in range(number)]
         for p in range(len(self.packages)):
             self.packages[p].name = str(p)
             self.dropoffs.append(self.packages[p].dropoff)
             self.pickups.append(self.packages[p].pickup)
         print "DropOffs:  "
         print self.dropoffs
+        print "packages:  "
+        for package in self.packages:
+            print package
 
     def generate_garage(self):
         self.garage = 0
@@ -95,7 +107,7 @@ class StateSpace(object):
         print(nx.nodes(self.space))
 
     def draw_space(self):
-        #self.relable()
+        # self.relable()
         # nx.draw(self.space)
         nx.draw_networkx_nodes(self.space, pos=self.positions)
         # nx.draw_networkx(self.space)
@@ -179,33 +191,20 @@ class StateSpace(object):
 
     def closest_dropoff(self, package):
         """
-        Finds closest dropoff point from node1
-        :param node1: node from graph
-        :return: distance to nearest dropoff, dropoff node.
+        Finds closest dropoff point from package pickup
+        TODO: Similar but different to closest_pickup - confusing difference in interface
+        :param package: package with pickup location
+        :return: (distance to nearest dropoff, dropoff node)
         """
         # print "Finding closest dropoff to " + str(node1)
-        node1 = package.pickup
+        pickup = package.pickup
         own_drop = package.dropoff
-        #Queue for BFS
-        q = Queue.Queue()
-        #priority Q for closest DO
+        # priority Q for closest DO
         pq = Queue.PriorityQueue(maxsize=0)
-        visited = []
-        self.expand_node(node1, q, visited)
-        #print "q empty?"
-        #print q.empty()
-        while not q.empty():
-            #print "q not empty"
-            #print "Size of q is:  " + str(q.qsize())
-            n = q.get()
-            #print "Node retrieved: " + str(n)
-            if n not in visited:
-                self.expand_node(n, q, visited)
-                #print "Node not visited yet...."
-                if self.visit_node(n, visited, self.valid_dropoff) and n is not own_drop:
-                    pq.put_nowait((self.distance(node1, n), n))
-        cn = pq.get_nowait()
-        return cn
+        for item in self.dropoffs:
+            if item is not own_drop:
+                pq.put((self.distance(pickup, item), item))
+        return pq.get()
 
     def closest_pickup(self, position):
         """
@@ -215,7 +214,7 @@ class StateSpace(object):
         """
         # print "closest pickup called"
         pq = Queue.PriorityQueue(maxsize=0)
-        #add all packages in priority q based on distance from position
+        # add all packages in priority q based on distance from position
         for packages in self.pickups:
             #print "putting in q...."
             pq.put((self.distance(position, packages), packages))

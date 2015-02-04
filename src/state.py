@@ -22,8 +22,11 @@ class State(object):
     # number of deliveries left
     deliveries = None
 
-    #total distance traveled by all trucks
+    # total distance traveled by all trucks
     total_dist = 0
+
+    # variable to indicate is garage is empty
+    garage_empty = False
 
     def __init__(self, v, p, space):
         super(State, self).__init__()
@@ -47,6 +50,7 @@ class State(object):
     def make_delivery(self, v):
         """
         Take vehicle with package, move to package location, and update distances driven.
+        Also updates status of garage if appropriate
         :param vehicle:
         :return:
         """
@@ -61,6 +65,10 @@ class State(object):
             vehicle.path = list(vehicle.path)
             vehicle.path.append(self.state_space.positions[vehicle.package.pickup])
             vehicle.path.append(self.state_space.positions[vehicle.package.dropoff])
+            #update the status of the garage
+            if vehicle.location == self.state_space.garage and not self.garage_empty:
+                self.garage_empty = True
+
             vehicle.location = vehicle.package.dropoff
             self.state_space.pickups.remove(vehicle.package.pickup)
             self.state_space.dropoffs.remove(vehicle.package.dropoff)
@@ -108,11 +116,22 @@ class State(object):
     def finished(self):
         return self.deliveries == 0
 
+    def activate_vehicle(self):
+        """
+        If the garage is empty and there are inactive vehicles, then activate one.
+        :return: void
+        """
+        if self.garage_empty and not self.inactive_vehicles.empty():
+            self.active_vehicles.append(self.inactive_vehicles.get())
+            #set garage to full again
+            self.garage_empty = False
+
     def __str__(self):
         string = "Deliveries left:  " + str(self.deliveries) + "\n"
         string += "Active vehicles:  " + str(len(self.active_vehicles)) + "\n"
         string += "Total distance driven:  " + str(self.total_dist) + "\n"
-        string += "Size of packages list in state space:  " + str(len(self.state_space.packages))
+        string += "Size of packages list in state space:  " + str(len(self.state_space.packages)) + "\n"
+        string += "Vehicles List:  \n"
         for vehicles in self.active_vehicles:
-            string += str(vehicles)
+            string += "\n" + str(vehicles) + "\n"
         return string

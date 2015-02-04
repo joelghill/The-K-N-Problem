@@ -23,10 +23,10 @@ class Search(object):
     W: Width of map
     """
 
-    def __init__(self, K, N, H, W):
+    def __init__(self, K, N, H, W, list=None):
         super(Search, self).__init__()
         # initialize state space
-        self.StateSpace = S.StateSpace(K, N, H, W)
+        self.StateSpace = S.StateSpace(K, N, H, W, list)
         self.vehicle_priority_q = Queue.PriorityQueue(maxsize=0)
         self.populate_v_q()
         self.current_state = state.State(self.StateSpace.vehicles, self.StateSpace.packages, self.StateSpace)
@@ -38,6 +38,9 @@ class Search(object):
         :param package: package to pick up
         :return: difference in distances between the pickup and garage, or pickup and nearest other dropoff
         """
+        #case for only one package
+        if len(self.StateSpace.packages) == 1:
+            return -1
         close_drop_dist = self.StateSpace.closest_dropoff(package)[0]
         garage_dist = len(self.StateSpace.shortest_path(self.StateSpace.garage, package.pickup))
         return garage_dist - close_drop_dist
@@ -54,6 +57,7 @@ class Search(object):
         then it is optimal to start a route with that package.
         :return:
         """
+        print 'setting initial fleet'
         if len(self.StateSpace.vehicles) == 1:
             v = self.current_state.inactive_vehicles.get()
             self.current_state.active_vehicles.append(v)
@@ -81,13 +85,24 @@ class Search(object):
         while not self.current_state.finished():
             self.current_state.assign_next_package()
             self.current_state.deliver_packages()
+            self.current_state.activate_vehicle()
         self.StateSpace.draw_space()
-        print self.current_state
+        #print self.current_state
+        return self.current_state.total_dist
 
-test = Search(4, 4, 10, 10)
+list1 = [[12, 12], [95, 5], [69, 39], [22, 84], [21, 41]]
+list2 = [[12, 12], [95, 5], [69, 39], [22, 84], [21, 41]]
+
+test = Search(5, 3, 10, 10, list(list1))
+test2 = Search(5, 1, 10, 10, list(list1))
 #print "Test Space Status"
 #print test.StateSpace.print_status()
 #print "Printing PQ:  "
 #print test.current_state
 #print "Test package:  " + str(test.current_state.packages[0])
-test.solution()
+dist1 = test.solution()
+dist2 = test2.solution()
+
+print "Total distance with 3 vehicles:  " + str(dist1) + "\n"
+print "Total distance with 1 vehicles:  " + str(dist2) + "\n"
+
