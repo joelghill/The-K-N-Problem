@@ -19,8 +19,11 @@ class StateSpace(object):
     vehicles = None
     packages = None
     dropoffs = []
+    pickups = []
     garage = None
     positions = {}
+
+    deliveries = []
 
     space = None
 
@@ -50,7 +53,6 @@ class StateSpace(object):
         self.map_positions(n, m)
         return nx.convert_node_labels_to_integers(g)
 
-
     def generate_vehicles(self, number):
         self.vehicles = [Vcl.Vehicle(self.garage) for i in range(number)]
 
@@ -60,6 +62,7 @@ class StateSpace(object):
         for p in range(len(self.packages)):
             self.packages[p].name = str(p)
             self.dropoffs.append(self.packages[p].dropoff)
+            self.pickups.append(self.packages[p].pickup)
         print "DropOffs:  "
         print self.dropoffs
 
@@ -92,24 +95,26 @@ class StateSpace(object):
         print(nx.nodes(self.space))
 
     def draw_space(self):
-        self.relable()
+        #self.relable()
         # nx.draw(self.space)
-        nx.draw_networkx(self.space, pos=self.positions)
+        nx.draw_networkx_nodes(self.space, pos=self.positions)
         # nx.draw_networkx(self.space)
 
         # add labels
-        # for node in nx.nodes(self.space):
-        # plt.annotate(u"n", xy=(1,1))
+        for delivered in self.deliveries:
+            plt.annotate("P" + str(delivered.name), xy=(self.positions[delivered.pickup]))
+            plt.annotate("D" + str(delivered.name), xy=(self.positions[delivered.dropoff]))
+            plt.annotate("G", xy=(self.positions[self.garage]))
 
-        #plt.annotate("annotate", xy=(1, 1))
+        # plt.annotate("annotate", xy=(1, 1))
 
         #plt.xlabel("X Axis")
         plt.savefig("output.png")  # save as png
         #plt.show()  # display
 
     def relable(self):
-        # mapping = {1:"G"}
-        # self.space = nx.relabel_nodes(self.space, mapping, False)
+        mapping = {0: "G"}
+        self.space = nx.relabel_nodes(self.space, mapping, False)
         return
 
     def map_positions(self, M, N):
@@ -168,17 +173,23 @@ class StateSpace(object):
             return True
         else:
             return False
-        
+
+    def valid_pickup(self, node):
+        return node in self.pickups
+
     def closest_dropoff(self, package):
         """
         Finds closest dropoff point from node1
         :param node1: node from graph
         :return: distance to nearest dropoff, dropoff node.
         """
-        #print "Finding closest dropoff to " + str(node1)
+        # print "Finding closest dropoff to " + str(node1)
         node1 = package.pickup
         own_drop = package.dropoff
+        #Queue for BFS
         q = Queue.Queue()
+        #priority Q for closest DO
+        pq = Queue.PriorityQueue(maxsize=0)
         visited = []
         self.expand_node(node1, q, visited)
         #print "q empty?"
@@ -192,7 +203,24 @@ class StateSpace(object):
                 self.expand_node(n, q, visited)
                 #print "Node not visited yet...."
                 if self.visit_node(n, visited, self.valid_dropoff) and n is not own_drop:
-                    return len(self.shortest_path(n, node1)), n
+                    pq.put_nowait((self.distance(node1, n), n))
+        cn = pq.get_nowait()
+        return cn
+
+    def closest_pickup(self, position):
+        """
+        Finds nearest pickup position from given position
+        :param position:
+        :return: (distance to pickup, pickup)
+        """
+        # print "closest pickup called"
+        pq = Queue.PriorityQueue(maxsize=0)
+        #add all packages in priority q based on distance from position
+        for packages in self.pickups:
+            #print "putting in q...."
+            pq.put((self.distance(position, packages), packages))
+        #return top of priority q
+        return pq.get()
 
 
 

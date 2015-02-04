@@ -18,8 +18,8 @@ class Package(object):
 
     def __init__(self, size):
         super(Package, self).__init__()
-        self.dropoff = random.randint(1, size)
-        self.pickup = random.randint(1, size)
+        self.dropoff = random.randint(1, size-1)
+        self.pickup = random.randint(1, size-1)
 
     def __str__(self):
         iden = "ID:  " + str(id(self))
