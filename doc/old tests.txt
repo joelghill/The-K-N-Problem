@@ -1,0 +1,311 @@
+OLD TESTS WITH BROKEN PROGRAM
+
+######################################
+Test 1
+######################################
+/usr/local/bin/python2.7 /Users/joelhill/The-K-N-Problem/src/search.py
+[[91, 30], [71, 43], [14, 35], [3, 38]]
+Graph info:
+Name: (grid_2d_graph)_with_int_labels
+Type: Graph
+Number of nodes: 100
+Number of edges: 180
+Average degree:   3.6000
+
+Vehicles generated:
+Total:  3
+ID:  4385858576
+Location:  30
+Package:  None
+Distance driven:  40.7737481535
+Path taken:  [0, (8, 8), (8, 4), (7, 1), (4, 3), (1, 4), (3, 5), (9, 1), (3, 0)]
+ID:  4385857872
+Location:  38
+Package:  None
+Distance driven:  8.83095189485
+Path taken:  [0, (0, 3), (3, 8)]
+ID:  4385858640
+Location:  0
+Package:  None
+Distance driven:  0
+Path taken:  [0]
+
+Total distance:  35.9204583604
+
+Process finished with exit code 0
+
+
+######################################
+Test 2
+######################################
+
+/usr/local/bin/python2.7 /Users/joelhill/The-K-N-Problem/src/search.py
+Package List:  
+[[13, 4], [46, 31], [96, 23], [14, 60], [22, 31]]
+Graph info:
+Name: (grid_2d_graph)_with_int_labels
+Type: Graph
+Number of nodes: 100
+Number of edges: 180
+Average degree:   3.6000
+
+Vehicles generated:
+Total:  3
+ID:  4376589264
+Location:  23
+Package:  None
+Distance driven:  26.3035924983
+Path taken:  [0, (1, 3), (0, 4), (1, 4), (6, 0), (9, 6), (2, 3)]
+ID:  4376588560
+Location:  31
+Package:  None
+Distance driven:  14.4406797143
+Path taken:  [0, (2, 2), (3, 1), (4, 6), (3, 1)]
+ID:  4376589328
+Location:  0
+Package:  None
+Distance driven:  0
+Path taken:  [0]
+Total distance:  40.7442722126
+
+
+Process finished with exit code 0
+
+######################################
+Test 3 - After heuristic tweak
+######################################
+
+/usr/local/bin/python2.7 /Users/joelhill/The-K-N-Problem/src/search.py
+Package List:  
+[[60, 90], [41, 77], [40, 41], [90, 87], [37, 78]]
+Graph info:
+Name: (grid_2d_graph)_with_int_labels
+Type: Graph
+Number of nodes: 100
+Number of edges: 180
+Average degree:   3.6000
+
+Vehicles generated:
+Total:  3
+ID:  4405785616
+Location:  78
+Package:  None
+Distance driven:  18.9544151837
+Path taken:  [0, (4, 1), (7, 7), (3, 7), (7, 8)]
+ID:  4405784912
+Location:  87
+Package:  None
+Distance driven:  17.3071357894
+Path taken:  [0, (4, 0), (4, 1), (6, 0), (9, 0), (9, 0), (8, 7)]
+ID:  4405785680
+Location:  0
+Package:  None
+Distance driven:  0
+Path taken:  [0]
+Total distance:  36.2615509731
+
+
+Process finished with exit code 0
+
+######################################
+Test 3 - 1 Vehicle
+######################################
+
+/usr/local/bin/python2.7 /Users/joelhill/The-K-N-Problem/src/search.py
+Package List:  
+[[37, 78], [90, 87], [40, 41], [41, 77], [60, 90]]
+Graph info:
+Name: (grid_2d_graph)_with_int_labels
+Type: Graph
+Number of nodes: 100
+Number of edges: 180
+Average degree:   3.6000
+
+Vehicles generated:
+Total:  1
+ID:  4368122896
+Location:  77
+Package:  None
+Distance driven:  40.7542184533
+Path taken:  [0, (4, 0), (4, 1), (6, 0), (9, 0), (9, 0), (8, 7), (3, 7), (7, 8), (4, 1), (7, 7)]
+Total distance:  40.7542184533
+
+
+Process finished with exit code 0
+######################################
+Test 4 - 5 Vehicle
+######################################
+
+/usr/local/bin/python2.7 /Users/joelhill/The-K-N-Problem/src/search.py
+Package List:  
+[[222, 42], [328, 191], [324, 375], [94, 12], [356, 198], [143, 346], [164, 185], [373, 30]]
+Graph info:
+Name: (grid_2d_graph)_with_int_labels
+Type: Graph
+Number of nodes: 400
+Number of edges: 760
+Average degree:   3.8000
+
+Vehicles generated:
+Total:  5
+ID:  4368036880
+Location:  198
+Package:  None
+Distance driven:  31.5914463111
+Path taken:  [0, (17, 16), (9, 18)]
+ID:  4368036176
+Location:  12
+Package:  None
+Distance driven:  19.0323557336
+Path taken:  [0, (4, 14), (0, 12)]
+ID:  4368036944
+Location:  375
+Package:  None
+Distance driven:  27.67276239
+Path taken:  [0, (16, 4), (18, 15)]
+ID:  4368037008
+Location:  30
+Package:  None
+Distance driven:  39.4662798128
+Path taken:  [0, (18, 13), (1, 10)]
+ID:  4368037072
+Location:  42
+Package:  None
+Distance driven:  48.9987533478
+Path taken:  [0, (7, 3), (17, 6), (16, 8), (9, 11), (8, 4), (9, 5), (11, 2), (2, 2)]
+Total distance:  166.761597595
+
+
+Process finished with exit code 0
+
+######################################
+Test 4 - 4 Vehicle
+######################################
+
+/usr/local/bin/python2.7 /Users/joelhill/The-K-N-Problem/src/search.py
+Package List:  
+[[373, 30], [164, 185], [143, 346], [356, 198], [94, 12], [324, 375], [328, 191], [222, 42]]
+Graph info:
+Name: (grid_2d_graph)_with_int_labels
+Type: Graph
+Number of nodes: 400
+Number of edges: 760
+Average degree:   3.8000
+
+Vehicles generated:
+Total:  4
+ID:  4381754384
+Location:  198
+Package:  None
+Distance driven:  31.5914463111
+Path taken:  [0, (17, 16), (9, 18)]
+ID:  4381753680
+Location:  12
+Package:  None
+Distance driven:  19.0323557336
+Path taken:  [0, (4, 14), (0, 12)]
+ID:  4381754448
+Location:  30
+Package:  None
+Distance driven:  46.9354388916
+Path taken:  [0, (16, 4), (18, 15), (18, 13), (1, 10)]
+ID:  4381754512
+Location:  42
+Package:  None
+Distance driven:  48.9987533478
+Path taken:  [0, (7, 3), (17, 6), (16, 8), (9, 11), (8, 4), (9, 5), (11, 2), (2, 2)]
+Total distance:  146.557994284
+
+
+Process finished with exit code 0
+######################################
+Test 4 - 3 Vehicle
+######################################
+/usr/local/bin/python2.7 /Users/joelhill/The-K-N-Problem/src/search.py
+Package List:  
+[[373, 30], [164, 185], [143, 346], [356, 198], [94, 12], [324, 375], [328, 191], [222, 42]]
+Graph info:
+Name: (grid_2d_graph)_with_int_labels
+Type: Graph
+Number of nodes: 400
+Number of edges: 760
+Average degree:   3.8000
+
+Vehicles generated:
+Total:  3
+ID:  4395463696
+Location:  191
+Package:  None
+Distance driven:  51.4137750327
+Path taken:  [0, (17, 16), (9, 18), (16, 8), (9, 11)]
+ID:  4395462992
+Location:  12
+Package:  None
+Distance driven:  19.0323557336
+Path taken:  [0, (4, 14), (0, 12)]
+ID:  4395463760
+Location:  42
+Package:  None
+Distance driven:  73.9744732765
+Path taken:  [0, (7, 3), (17, 6), (16, 4), (18, 15), (18, 13), (1, 10), (8, 4), (9, 5), (11, 2), (2, 2)]
+Total distance:  144.420604043
+
+
+Process finished with exit code 0
+
+######################################
+Test 4 - 2 Vehicle
+######################################
+
+/usr/local/bin/python2.7 /Users/joelhill/The-K-N-Problem/src/search.py
+Package List:  
+[[373, 30], [164, 185], [143, 346], [356, 198], [94, 12], [324, 375], [328, 191], [222, 42]]
+Graph info:
+Name: (grid_2d_graph)_with_int_labels
+Type: Graph
+Number of nodes: 400
+Number of edges: 760
+Average degree:   3.8000
+
+Vehicles generated:
+Total:  2
+ID:  4378498064
+Location:  191
+Package:  None
+Distance driven:  51.4137750327
+Path taken:  [0, (17, 16), (9, 18), (16, 8), (9, 11)]
+ID:  4378497360
+Location:  42
+Package:  None
+Distance driven:  85.5407732732
+Path taken:  [0, (7, 3), (17, 6), (16, 4), (18, 15), (18, 13), (1, 10), (4, 14), (0, 12), (8, 4), (9, 5), (11, 2), (2, 2)]
+Total distance:  136.954548306
+
+
+Process finished with exit code 0
+
+######################################
+Test 4 - 1 Vehicle
+######################################
+
+/usr/local/bin/python2.7 /Users/joelhill/The-K-N-Problem/src/search.py
+Package List:  
+[[373, 30], [164, 185], [143, 346], [356, 198], [94, 12], [324, 375], [328, 191], [222, 42]]
+Graph info:
+Name: (grid_2d_graph)_with_int_labels
+Type: Graph
+Number of nodes: 400
+Number of edges: 760
+Average degree:   3.8000
+
+Vehicles generated:
+Total:  1
+ID:  4396348432
+Location:  198
+Package:  None
+Distance driven:  126.068284974
+Path taken:  [0, (7, 3), (17, 6), (16, 4), (18, 15), (18, 13), (1, 10), (4, 14), (0, 12), (8, 4), (9, 5), (11, 2), (2, 2), (16, 8), (9, 11), (17, 16), (9, 18)]
+Total distance:  126.068284974
+
+
+Process finished with exit code 0
