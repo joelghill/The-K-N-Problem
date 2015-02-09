@@ -29,3 +29,6 @@ class Package(object):
         pick = "Pickup Location:  " + str(self.pickup)
         d = "Delivered:  " + str(self.delivered)
         return iden + "\n" + name + "\n" + drop + "\n" + pick + "\n" + d + "\n"
+
+    def data(self):
+        return [self.pickup, self.dropoff]

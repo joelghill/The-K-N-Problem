@@ -72,11 +72,13 @@ class StateSpace(object):
             self.packages[p].name = str(p)
             self.dropoffs.append(self.packages[p].dropoff)
             self.pickups.append(self.packages[p].pickup)
+        """
         print "DropOffs:  "
         print self.dropoffs
         print "packages:  "
         for package in self.packages:
             print package
+        """
 
     def generate_garage(self):
         self.garage = 0
@@ -97,14 +99,6 @@ class StateSpace(object):
 
         for Vcl.Vehicle in self.vehicles:
             print(Vcl.Vehicle)
-
-        print("Packages:")
-        for Pkg.Package in self.packages:
-            print(Pkg.Package)
-            print("")
-
-        print("Nodes: ")
-        print(nx.nodes(self.space))
 
     def draw_space(self):
         # self.relable()
@@ -220,6 +214,16 @@ class StateSpace(object):
             pq.put((self.distance(position, packages), packages))
         #return top of priority q
         return pq.get()
+
+    def package_list(self):
+        """
+        Returns a list representation of the packages in the style [[pickup, dropoff], ...]
+        :return: package_list[]
+        """
+        package_list = []
+        for package in self.packages:
+            package_list.append(package.data())
+        return package_list
 
 
 

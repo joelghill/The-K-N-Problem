@@ -26,6 +26,7 @@ class Search(object):
     def __init__(self, K, N, H, W, list=None):
         super(Search, self).__init__()
         # initialize state space
+        #print "List is:  " + list
         self.StateSpace = S.StateSpace(K, N, H, W, list)
         self.vehicle_priority_q = Queue.PriorityQueue(maxsize=0)
         self.populate_v_q()
@@ -57,7 +58,7 @@ class Search(object):
         then it is optimal to start a route with that package.
         :return:
         """
-        print 'setting initial fleet'
+        #print 'setting initial fleet'
         if len(self.StateSpace.vehicles) == 1:
             v = self.current_state.inactive_vehicles.get()
             self.current_state.active_vehicles.append(v)
@@ -81,28 +82,46 @@ class Search(object):
         self.current_state.deliver_packages()
         return
 
-    def solution(self):
+    def solve(self):
         while not self.current_state.finished():
             self.current_state.assign_next_package()
             self.current_state.deliver_packages()
             self.current_state.activate_vehicle()
         self.StateSpace.draw_space()
-        #print self.current_state
         return self.current_state.total_dist
 
-list1 = [[12, 12], [95, 5], [69, 39], [22, 84], [21, 41]]
-list2 = [[12, 12], [95, 5], [69, 39], [22, 84], [21, 41]]
+    def print_current_state(self):
+        self.StateSpace.print_status()
 
-test = Search(5, 3, 10, 10, list(list1))
-test2 = Search(5, 1, 10, 10, list(list1))
+    def print_package_list(self):
+        print self.StateSpace.package_list()
+
+    def solution(self):
+        if self.current_state.finished():
+            self.print_current_state()
+        else:
+            print "No solution yet. use solve()"
+
+#list1 = [[12, 12], [95, 5], [69, 39], [22, 84], [21, 41]]
+#list2 = [[12, 12], [95, 5], [69, 39], [22, 84], [21, 41]]
+
+test1_list = 
+
+test = Search(5, 3, 10, 10)
+test1_1vehicle = Search(5, 3, 10, 10)
+#test2 = Search(5, 1, 10, 10, list(list1))
 #print "Test Space Status"
 #print test.StateSpace.print_status()
 #print "Printing PQ:  "
 #print test.current_state
 #print "Test package:  " + str(test.current_state.packages[0])
-dist1 = test.solution()
-dist2 = test2.solution()
+print "Package List:  "
+test.print_package_list()
+dist1 = test.solve()
+#dist2 = test2.solve()
 
-print "Total distance with 3 vehicles:  " + str(dist1) + "\n"
-print "Total distance with 1 vehicles:  " + str(dist2) + "\n"
+test.solution()
+
+print "Total distance:  " + str(dist1) + "\n"
+#print "Total distance with 1 vehicles:  " + str(dist2) + "\n"
 
