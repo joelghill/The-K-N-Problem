@@ -4,8 +4,6 @@
 
 # Class to represent package
 import random
-import networkx as nx
-import matplotlib.pyplot as plt
 
 
 class Package(object):

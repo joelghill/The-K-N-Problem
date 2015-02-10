@@ -46,7 +46,6 @@ class StateSpace(object):
         self.generate_vehicles(N)
         self.generate_packages(K, packages)
 
-
     def generateSpace(self, n, m):
         """ return graph of n * m  size"""
         g = nx.grid_2d_graph(n, m, periodic=False, create_using=None)
@@ -72,22 +71,9 @@ class StateSpace(object):
             self.packages[p].name = str(p)
             self.dropoffs.append(self.packages[p].dropoff)
             self.pickups.append(self.packages[p].pickup)
-        """
-        print "DropOffs:  "
-        print self.dropoffs
-        print "packages:  "
-        for package in self.packages:
-            print package
-        """
 
     def generate_garage(self):
         self.garage = 0
-        return
-
-    def unit_test(self):
-        self.draw_space()
-        self.print_status()
-        self.distance(0, 1)
         return
 
     def print_status(self):
@@ -101,10 +87,7 @@ class StateSpace(object):
             print(Vcl.Vehicle)
 
     def draw_space(self):
-        # self.relable()
-        # nx.draw(self.space)
         nx.draw_networkx_nodes(self.space, pos=self.positions)
-        # nx.draw_networkx(self.space)
 
         # add labels
         for delivered in self.deliveries:
@@ -112,16 +95,7 @@ class StateSpace(object):
             plt.annotate("D" + str(delivered.name), xy=(self.positions[delivered.dropoff]))
             plt.annotate("G", xy=(self.positions[self.garage]))
 
-        # plt.annotate("annotate", xy=(1, 1))
-
-        #plt.xlabel("X Axis")
         plt.savefig("output.png")  # save as png
-        #plt.show()  # display
-
-    def relable(self):
-        mapping = {0: "G"}
-        self.space = nx.relabel_nodes(self.space, mapping, False)
-        return
 
     def map_positions(self, M, N):
         key = 0
@@ -137,42 +111,6 @@ class StateSpace(object):
         dist_tup = (pos1[0] - pos2[0], pos1[1] - pos2[1])
         dist = math.sqrt((dist_tup[0] ** 2) + (dist_tup[1] ** 2))
         return dist
-
-    def shortest_path(self, point1, point2):
-        """ Use A* to calculate shortest path between nodes """
-        return nx.astar_path(self.space, point1, point2, heuristic=self.distance)
-
-    def expand_node(self, node, queue, visited):
-        """
-        Method to expand nodes for BFS
-        :rtype : None
-        :param node: nod to expand
-        :param queue: unexpanded nodes
-        :param visited: list of visited nodes
-        :return:
-        """
-        neighbours = nx.all_neighbors(self.space, node)
-        while True:
-            try:
-                n = neighbours.next()
-                if node not in visited:
-                    queue.put(n)
-            except StopIteration:
-                break
-        return
-
-    def visit_node(self, node, visited, visit_function):
-        """
-
-        :param node: Node to visit
-        :param visited: list of previously visted nodes
-        :param visit_function: Function to perform on node
-        :return: result of visit_function or None if node visited
-        """
-
-        assert isinstance(visited, list)
-        visited.append(node)
-        return visit_function(node)
 
     def valid_dropoff(self, node):
         if node in self.dropoffs:

@@ -82,6 +82,10 @@ class State(object):
             self.make_delivery(self.pending_deliveries.get())
 
     def assign_next_package(self):
+        """
+        Places all packages left to be delivered into a priority queue based on their cost.
+        :return: void
+        """
         pq = Queue.PriorityQueue()
         for packages in self.packages:
             cost_and_vehicle = self.cost_of_package(packages)
@@ -94,6 +98,12 @@ class State(object):
         return
 
     def closest_active_vehicle(self, position):
+        """
+        Finds the closest active vehicle to given location.
+        :rtype : (int, Vehicle)
+        :param position: map position to find closest vehicle to
+        :return: (distance to vehicle, vehicle)
+        """
         pq = Queue.PriorityQueue(maxsize=0)
         #add all vehicles in priority q based on distance from position
         for vehicles in self.active_vehicles:
@@ -103,7 +113,9 @@ class State(object):
 
     def cost_of_package(self, package):
         """
-        Cost of package and vehicle associated with cost
+        Cost of package and vehicle associated with cost.
+        Is equal to the distance to the closest pickup location to the package drop off
+        location, in addition to the distance to the closest active vehicle from it's pickup.
         :param package:
         :return: (cost, vehicle)
         """
